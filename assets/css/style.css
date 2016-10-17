@@ -1,21 +1,58 @@
 * {
-  box-sizing: border-box;
-  text-align: : centered;
+	box-sizing: border-box;
 }
 header {
 	text-align: center;
 	border-bottom: solid .3em #4aaaa5;
 }
-
-
-
-
+body{
+	text-align: center;
+}
 footer {
+	clear: left;
 	background-image: url("../images/bgrnd.png");
 	padding: 1em;
 	border-top: solid .3em #4aaaa5;
 	text-align: center;
 	color: #fff;
+}
+h1 {
+	margin-top: 0;
+
+}
+.full-width-answer {
+	background-color: #00ffff;
+	width: 100%;
+}
+.center-answer {
+	background-color: #66ffcc;
+	width: 30em;
+	margin: 0 auto;
+}
+.full-width-game {
+	background-color: #99ccff;
+	width: 100%;
+}
+.center-game {
+	overflow: auto;
+	width: 30em;
+	margin: 0 auto;
+}
+.left-game, .right-game {
+	width: 15em;
+	border-style: dotted;
+}
+.left-game {
+	/*width: 15em;*/
+	background-color: #ffcc99;
+	/*border-style: dotted;*/
+	float: left;
+}
+.right-game {
+	/*width: 15em;*/
+	background-color: #ccff66;
+	/*border-style: dotted;*/
+	float: right;
 }
 
 
