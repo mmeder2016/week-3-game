@@ -44,6 +44,7 @@ p {
 }
 .left-game, .right-game {
 	width: 15em;
+	height: 30em;
 	border-style: dotted;
 }
 .left-game {
