@@ -13,23 +13,24 @@ document.onkeyup = function(event) {
 
 updateHTML = function()
 {
-	var formatPlayersWord = "";
-	if(gameObj.gameInProgress())
+	// When playing the game, format the playersWord for html with a 
+	// space between the letters/underscores - it just looks nicer	
+	var formattedPlayersWord = "";
+	if(gameObj.gameHasStarted)
 	{
-		// When playing the game, format the playersWord for html with a 
-		// space between the letters - it just looks nicer
+
 		for (var i = 0; i < gameObj.playersWord.length; i++) {
-			formatPlayersWord += gameObj.playersWord.charAt(i);
+			formattedPlayersWord += gameObj.playersWord.charAt(i);
 			if(i + 1 != gameObj.playersWord.length) {
-				formatPlayersWord += " ";
+				formattedPlayersWord += " ";
 			}
 		}
 	}
 	else 
 	{
-		formatPlayersWord = "NONE";
+		formattedPlayersWord = "NONE";
 	}
-	document.getElementById("players-word").innerHTML = formatPlayersWord;
+	document.getElementById("players-word").innerHTML = formattedPlayersWord;
 	document.getElementById("used-letters").innerHTML = gameObj.usedLetters;
 	document.getElementById("num-wins").innerHTML = gameObj.winCount;
 	document.getElementById("guesses-remaining").innerHTML = gameObj.guessesRemaining;
@@ -41,15 +42,16 @@ var gameObj = {
 	wordToGuess: "", 
 	// This will hold the players version of the word to guess. initially it
 	// will be the same length as wordToGuess but all of the characters will
-	// be initialized with underscores
+	// be initialized with underscores. As a letter is correctly guessed, it
+	// will be made visible in playersWord at the correct position.
 	playersWord: "", 
 	// This is a list of the letters the player has previously guessed
 	usedLetters: "",
 	// The count of previous wins
 	winCount: 0,
 	// Flag to indicate if we are in the middle of a game
-	gameHasStarted:false,
-
+	gameHasStarted: false,
+	// Initially giving only 10 guesses
 	guessesRemaining: 10,
 
 	words3: [
@@ -57,18 +59,18 @@ var gameObj = {
 		'CHOCOLATE',
 		'STRAWBERRY',
 	],
-	gameInProgress: function()
-	{
-		return this.gameHasStarted;
-	},
-	resetGame: function()
-		{
+
+	// Initialize variables after a win to make the page looks good between 
+	// games. Also allows so that the first keypress after a win will only 
+	// start the game and not be the first guess
+	resetBetweenGames: function() {
 		this.wordToGuess = "";
 		this.usedLetters = "";
 		this.playersWord = "NONE";
 		this.guessesRemaining = 0;
 		this.gameHasStarted = false;
 	},
+	// Initialize variables after a keypress to start the new game
 	startGame: function()
 	{
 		this.wordToGuess = "";
@@ -82,6 +84,8 @@ var gameObj = {
 	{
 		this.wordToGuess = this.words3[Math.floor(Math.random() * this.words3.length)];
 		this.playersWord = "";
+		// initialize var "playersWord" to the same length as var "wordToGuess"
+		// with all of characters initialized to underscores.
 		for (var i = 0; i < this.wordToGuess.length; ++i) {
 		    this.playersWord += '_';
 		}
@@ -89,12 +93,13 @@ var gameObj = {
 	},
 	addGuess: function(letter)
 	{
-		// if the letter has not been guessed already
+		// If the letter has not been guessed already
 		if(this.usedLetters.indexOf(letter) == -1)
 		{
 			this.guessesRemaining--; 
 			this.usedLetters += letter;
-			// Check all the letters in var "wordToGuess"
+			// Check all the letters in var "wordToGuess" to see if it matches
+			// the guess and then update the playersWord
 			for (var i = 0; i < this.wordToGuess.length; i++) {
 				// If we find the letter in var "wordToGuess"
 				// Remember, all unguessed letters in var "playersWord" are 
@@ -110,7 +115,7 @@ var gameObj = {
 			else if(this.guessesRemaining === 0)
 			{
 				alert("You're out of guesses fool! The word was " + this.wordToGuess);
-				this.resetGame();
+				this.resetBetweenGames();
 			}
 			updateHTML();
 		}
@@ -121,6 +126,6 @@ var gameObj = {
 	win: function()
 	{
 		this.winCount++;
-		this.resetGame();
+		this.resetBetweenGames();
 	},
 }
