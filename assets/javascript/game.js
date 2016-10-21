@@ -23,7 +23,7 @@ document.onkeyup = function(event) {
 				alert("You're out of guesses fool! The word was " + gameObj.wordToGuess);
 			} else if (ret ===4)
 			{
-				//win
+				winGame();
 			}
 			gameObj.resetBetweenGames();
 			resetGameHtml();
@@ -37,8 +37,30 @@ document.onkeyup = function(event) {
 		gameObj.setGuessesRemaining(12);
 		resetGameHtml();
 		document.getElementById("game-state").innerHTML = "GAME IS IN PROGRESS<br> GOOD LUCK <br><br> WINS <br>";
+		document.getElementById("left-img").innerHTML="";
+		document.getElementById("top-text").innerHTML = "HANGMAN";
 	}
 };
+winGame = function()
+{
+	var elem = document.getElementById("left-img");
+	document.getElementById("top-text").innerHTML = gameObj.playersWord;
+
+	var img = document.createElement('IMG');
+	img.setAttribute("width", "100%");
+	img.setAttribute("height", "100%");
+	if(gameObj.playersWord === "CHOCOLATE")
+	{
+		img.setAttribute("src", "assets/images/chocolate.png");
+	} else if (gameObj.playersWord === "VANILLA")
+	{
+		img.setAttribute("src", "assets/images/vanilla.png");
+	} else if (gameObj.playersWord === "STRAWBERRY")
+	{
+		img.setAttribute("src", "assets/images/strawberry.png");
+	}
+	elem.appendChild(img);
+}
 resetGameHtml = function()
 {
 	document.getElementById("players-word").innerHTML = reFormatPlayersWord();
@@ -62,6 +84,21 @@ reFormatPlayersWord = function()
 }
 // USING THE GAME OBJECT
 /*
+Methods used
+	startGame();
+	setGuessesRemaining(12);
+	resetBetweenGames();
+	addGuess(letter);
+
+Variables used
+	gameHasStarted
+	playersWord
+	winCount;
+	usedLetters;
+	guessesRemaining
+
+Usage:
+
 	if(gameObj.gameHasStarted)
 	{
 		var letter = String.fromCharCode(event.keyCode).toUpperCase();
@@ -98,7 +135,7 @@ reFormatPlayersWord = function()
 		// updated gameObj.guessesRemaining;
 	}
 */
-// Game Object
+// Game Object - only game logic, no DOM calls
 var gameObj = {
 	// This will hold the current word to guess
 	wordToGuess: "", 
@@ -123,6 +160,7 @@ var gameObj = {
 		'CHOCOLATE',
 		'STRAWBERRY',
 	],
+
 
 	// Initialize variables after a win to make the page looks as one would 
 	// expect it to between games. Also allows so that the first keypress 
