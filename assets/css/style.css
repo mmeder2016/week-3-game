@@ -7,6 +7,7 @@ header {
 }
 body{
 	text-align: center;
+	background-color: #ffffff;
 }
 footer {
 	clear: left;
@@ -15,27 +16,30 @@ footer {
 	border-top: solid .3em #4aaaa5;
 	text-align: center;
 	color: #fff;
+	font-family: "Arial";
 }
 h1 {
 	margin-top: 0;
-
 }
 
 p {
-	font: ;
+	font-family: "Comic Sans MS";
+	color: white;
+
 }
 .full-width-answer {
 	background-color: #00ffff;
 	width: 100%;
 }
 .center-answer {
-	background-color: #66ffcc;
+	/*background-color: #66ffcc;*/
 	width: 30em;
 	margin: 0 auto;
 }
 .full-width-game {
-	background-color: #99ccff;
+	/*background-color: #99ccff;*/
 	width: 100%;
+	background-color: black;
 }
 .center-game {
 	overflow: auto;
@@ -44,18 +48,20 @@ p {
 }
 .left-game, .right-game {
 	width: 15em;
-	height: 30em;
+	height: 32em;
 	border-style: dotted;
+	border-color: white;
+	background-color: black;
 }
 .left-game {
 	/*width: 15em;*/
-	background-color: #ffcc99;
+	/*background-color: #ffcc99;*/
 	/*border-style: dotted;*/
 	float: left;
 }
 .right-game {
 	/*width: 15em;*/
-	background-color: #ccff66;
+	/*background-color: #ccff66;*/
 	/*border-style: dotted;*/
 	float: right;
 }

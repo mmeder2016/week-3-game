@@ -1,6 +1,6 @@
 // GLOBAL Functions
 document.onkeyup = function(event) {
-	if(gameObj.gameInProgress())
+	if(gameObj.gameHasStarted)
 	{
 		gameObj.addGuess(String.fromCharCode(event.keyCode).toUpperCase());
 	}
@@ -18,17 +18,18 @@ updateHTML = function()
 	var formattedPlayersWord = "";
 	if(gameObj.gameHasStarted)
 	{
-
 		for (var i = 0; i < gameObj.playersWord.length; i++) {
 			formattedPlayersWord += gameObj.playersWord.charAt(i);
 			if(i + 1 != gameObj.playersWord.length) {
 				formattedPlayersWord += " ";
 			}
 		}
+		document.getElementById("game-state").innerHTML = "GAME IS IN PROGRESS<br> GOOD LUCK <br><br> WINS <br>";
 	}
 	else 
 	{
 		formattedPlayersWord = "NONE";
+		document.getElementById("game-state").innerHTML = "PRESS ANY KEY TO GET <br> STARTED! <br><br> WINS <br>";
 	}
 	document.getElementById("players-word").innerHTML = formattedPlayersWord;
 	document.getElementById("used-letters").innerHTML = gameObj.usedLetters;
@@ -51,7 +52,7 @@ var gameObj = {
 	winCount: 0,
 	// Flag to indicate if we are in the middle of a game
 	gameHasStarted: false,
-	// Initially giving only 10 guesses
+	// Initially giving only 10 wrong guesses
 	guessesRemaining: 10,
 
 	words3: [
@@ -60,9 +61,9 @@ var gameObj = {
 		'STRAWBERRY',
 	],
 
-	// Initialize variables after a win to make the page looks good between 
-	// games. Also allows so that the first keypress after a win will only 
-	// start the game and not be the first guess
+	// Initialize variables after a win to make the page looks as one would 
+	// expect it to between games. Also allows so that the first keypress 
+	// after a win will only start the game and not be the first guess
 	resetBetweenGames: function() {
 		this.wordToGuess = "";
 		this.usedLetters = "";
@@ -96,7 +97,8 @@ var gameObj = {
 		// If the letter has not been guessed already
 		if(this.usedLetters.indexOf(letter) == -1)
 		{
-			this.guessesRemaining--; 
+			var correctGuess = false;
+			// this.guessesRemaining--; 
 			this.usedLetters += letter;
 			// Check all the letters in var "wordToGuess" to see if it matches
 			// the guess and then update the playersWord
@@ -107,8 +109,13 @@ var gameObj = {
 				if(letter === this.wordToGuess.charAt(i) ) {
 			    	// Replace the _ with the letter by creating a new string
 			    	this.playersWord = this.playersWord.substring(0, i) + letter + this.playersWord.substring(i+1);
+			    	correctGuess = true;
 			    }
-			}			
+			}	
+			if(correctGuess === false)
+			{
+				this.guessesRemaining--;
+			}		
 			if(this.wordToGuess === this.playersWord) {
 				this.win();
 			}
