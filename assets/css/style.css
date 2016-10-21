@@ -4,6 +4,7 @@
 header {
 	text-align: center;
 	border-bottom: solid .3em #4aaaa5;
+	width: 100%;
 }
 body{
 	text-align: center;
@@ -17,6 +18,7 @@ footer {
 	text-align: center;
 	color: #fff;
 	font-family: "Arial";
+	width: 100%;
 }
 h1 {
 	margin-top: 0;
