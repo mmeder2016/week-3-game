@@ -2,17 +2,50 @@
 document.onkeyup = function(event) {
 	if(gameObj.gameHasStarted)
 	{
-		gameObj.addGuess(String.fromCharCode(event.keyCode).toUpperCase());
-
+		var letter = String.fromCharCode(event.keyCode).toUpperCase();
+		var ret = gameObj.addGuess(letter);
+		if(ret === 0) // the guess was correct, but not a win
+		{
+			document.getElementById("players-word").innerHTML = reFormatPlayersWord();
+			document.getElementById("used-letters").innerHTML = gameObj.usedLetters;
+		} else if(ret === 1) // The guess was incorrect
+		{
+			document.getElementById("used-letters").innerHTML = gameObj.usedLetters;
+			document.getElementById("guesses-remaining").innerHTML = gameObj.guessesRemaining;
+		} else if(ret === 3) // The guess was already used
+		{
+			alert("Letter " + letter + " has already been guessed!");
+		} else if(ret ===2 || ret === 4) 
+		{
+			// The game is over (2 - player out of guesses, 4 - player won)
+			if(ret === 2)
+			{
+				alert("You're out of guesses fool! The word was " + gameObj.wordToGuess);
+			} else if (ret ===4)
+			{
+				//win
+			}
+			gameObj.resetBetweenGames();
+			resetGameHtml();
+			document.getElementById("game-state").innerHTML = "PRESS ANY KEY TO GET <br> STARTED! <br><br> WINS <br>";
+		}
 	}
 	else
 	{
 		// Start a new word and reset variables
 		gameObj.startGame();
 		gameObj.setGuessesRemaining(12);
-		updateHTML();
+		resetGameHtml();
+		document.getElementById("game-state").innerHTML = "GAME IS IN PROGRESS<br> GOOD LUCK <br><br> WINS <br>";
 	}
 };
+resetGameHtml = function()
+{
+	document.getElementById("players-word").innerHTML = reFormatPlayersWord();
+	document.getElementById("num-wins").innerHTML = gameObj.winCount;
+	document.getElementById("used-letters").innerHTML = gameObj.usedLetters;
+	document.getElementById("guesses-remaining").innerHTML = gameObj.guessesRemaining;
+}
 
 // When playing the game, format the playersWord for html with a 
 // space between the letters/underscores - it just looks nicer
@@ -27,28 +60,44 @@ reFormatPlayersWord = function()
 	}
 	return str;
 }
-
-updateHTML = function()
-{
-	// When playing the game, format the playersWord for html with a 
-	// space between the letters/underscores - it just looks nicer	
-	var formattedPlayersWord = "";
+// USING THE GAME OBJECT
+/*
 	if(gameObj.gameHasStarted)
 	{
-		formattedPlayersWord = reFormatPlayersWord();
-		document.getElementById("game-state").innerHTML = "GAME IS IN PROGRESS<br> GOOD LUCK <br><br> WINS <br>";
+		var letter = String.fromCharCode(event.keyCode).toUpperCase();
+		var ret = gameObj.addGuess(letter);
+		if(ret === 0) // the guess was correct, but not a win
+		{
+			// updated gameObj.playersWord;
+			// updated gameObj.usedLetters;
+		} else if(ret === 1) // The guess was incorrect
+		{
+			// updated gameObj.usedLetters;
+			// updated gameObj.guessesRemaining;
+		} else if(ret === 3) // The guess was already used
+		{
+			// inform player
+		} else if(ret ===2 || ret === 4) 
+		{
+			// The game is over (2 - player out of guesses, 4 - player won)
+			// inform player
+			// call gameObj.resetBetweenGames();
+			// updated gameObj.playersWord
+			// updated gameObj.winCount;
+			// updated gameObj.usedLetters;
+			// updated gameObj.guessesRemaining;
+		}
 	}
-	else 
+	else
 	{
-		formattedPlayersWord = "NONE";
-		document.getElementById("game-state").innerHTML = "PRESS ANY KEY TO GET <br> STARTED! <br><br> WINS <br>";
+		// call gameObj.startGame();
+		// call gameObj.setGuessesRemaining(12);
+		// updated gameObj.playersWord
+		// updated gameObj.winCount;
+		// updated gameObj.usedLetters;
+		// updated gameObj.guessesRemaining;
 	}
-	document.getElementById("players-word").innerHTML = formattedPlayersWord;
-	document.getElementById("used-letters").innerHTML = gameObj.usedLetters;
-	document.getElementById("num-wins").innerHTML = gameObj.winCount;
-	document.getElementById("guesses-remaining").innerHTML = gameObj.guessesRemaining;
-}
-
+*/
 // Game Object
 var gameObj = {
 	// This will hold the current word to guess
@@ -105,8 +154,16 @@ var gameObj = {
 		    this.playersWord += '_';
 		}	
 	},
+	// addGuess() Performs all of the logic for adding a letter guess to the game
+	// Return values
+	// 	0 - the guess was correct
+	// 	1 - the guess was incorrect
+	// 	2 - the guess was incorrect player is out of guesses
+	// 	3 – the guess was already used
+	// 	4 - the game was won
 	addGuess: function(letter)
 	{
+		var retval = -1;
 		// If the letter has not been guessed already
 		if(this.usedLetters.indexOf(letter) == -1)
 		{
@@ -125,31 +182,27 @@ var gameObj = {
 			    	// Replace the _ with the letter by creating a new string
 			    	this.playersWord = this.playersWord.substring(0, i) + letter + this.playersWord.substring(i+1);
 			    	correctGuess = true;
+			    	retval = 0; // The guess was correct
 			    }
 			}	
 			if(correctGuess === false)
 			{
+				retval = 1; // The guess was incorrect
 				this.guessesRemaining--;
+				if(this.guessesRemaining === 0)
+				{
+					retval = 2; // The player is out of guesses
+				}
 			}		
 			if(this.wordToGuess === this.playersWord) {
-				this.win();
+				retval = 4; // The player won the game
+				this.winCount++;
 			}
-			else if(this.guessesRemaining === 0)
-			{
-				alert("You're out of guesses fool! The word was " + this.wordToGuess);
-				this.resetBetweenGames();
-			}
-			updateHTML();
 		}
 		else {
-			// The letter has been guessed already
-			alert("Letter " + letter + " has already been guessed!");
+			retval = 3; // This guess was already used
 		}
-	},
-	win: function()
-	{
-		this.winCount++;
-		this.resetBetweenGames();
+		return retval;
 	},
 	setGuessesRemaining: function(n)
 	{
