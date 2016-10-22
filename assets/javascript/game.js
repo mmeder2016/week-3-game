@@ -41,6 +41,8 @@ document.onkeyup = function(event) {
 		document.getElementById("top-text").innerHTML = "HANGMAN";
 	}
 };
+// This is called when the player wins the game to put on whatever show yo
+// have planned
 winGame = function()
 {
 	var elem = document.getElementById("left-img");
@@ -61,6 +63,7 @@ winGame = function()
 	}
 	elem.appendChild(img);
 }
+// Helper function to reset some of the html text
 resetGameHtml = function()
 {
 	document.getElementById("players-word").innerHTML = reFormatPlayersWord();
@@ -97,7 +100,8 @@ Variables used
 	usedLetters;
 	guessesRemaining
 
-Usage:
+Usage: tell what variables were modified after each state so the user can
+update the html page.
 
 	if(gameObj.gameHasStarted)
 	{
@@ -140,9 +144,8 @@ var gameObj = {
 	// This will hold the current word to guess
 	wordToGuess: "", 
 	// This will hold the players version of the word to guess. initially it
-	// will be the same length as wordToGuess but all of the characters will
-	// be initialized with underscores. As a letter is correctly guessed, it
-	// will be made visible in playersWord at the correct position.
+	// will be initialized with underscores. As a letter is correctly guessed, 
+	// it will be made visible in playersWord at the correct position.
 	playersWord: "", 
 	// This is a list of the letters the player has previously guessed. This
 	// includes correct and incorrect guesses
@@ -151,7 +154,8 @@ var gameObj = {
 	winCount: 0,
 	// Flag to indicate if we are in the middle of a game or between games
 	gameHasStarted: false,
-	// Allowing 10 incorrect guesses
+	// Allowing 10 incorrect guesses - this can be set externally by calling
+	// gameObj.setGuessesRemaining(8)
 	guessesRemaining: 10,
 
 	// The possible words that will be used in the game
@@ -182,6 +186,7 @@ var gameObj = {
 		this.guessesRemaining = 10;
 		this.setNewWord();
 	},
+	// go to the array and get a random word to guess
 	setNewWord: function()
 	{
 		this.wordToGuess = this.words3[Math.floor(Math.random() * this.words3.length)];
