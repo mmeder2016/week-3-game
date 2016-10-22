@@ -11,7 +11,6 @@ body{
 	background-color: #ffffff;
 }
 footer {
-	clear: left;
 	background-image: url("../images/bgrnd.png");
 	padding: 1em;
 	border-top: solid .3em #4aaaa5;
@@ -19,26 +18,36 @@ footer {
 	color: #fff;
 	font-family: "Arial";
 	width: 100%;
+	padding: 1.5em 0;
+}
+h2 {
+	font-size: 1.5em;
+	font-family: "Times New Roman";
+	font-weight: bold;
+	margin: 20px 0;
 }
 h1 {
+	font-size: 2em;
+	font-family: "Times New Roman";
+	font-weight: bold;
 	margin-top: 0;
 	margin-bottom: 0;
 	color: white;
 	background-color: black;
-	padding: 1em;
+	padding: 1em 0;
 }
 
 p {
 	font-family: "Comic Sans MS";
 	color: white;
-
+	margin: 16px 0;
 }
 .full-width-answer {
 	background-color: black;
 	width: 100%;
 }
 .center-answer {
-	/*background-color: #66ffcc;*/
+	background-color: #66ffcc;
 	width: 30em;
 	margin: 0 auto;
 }
@@ -54,7 +63,8 @@ p {
 }
 .left-game, .right-game {
 	width: 15em;
-	height: 32em;
+	height: 26em;
+	border-width: 3px;
 	border-style: dotted;
 	border-color: white;
 	background-color: black;
@@ -72,8 +82,20 @@ p {
 	float: right;
 }
 
-
-
+@media screen and (max-width: 640px) {
+	.center-game {
+		overflow: auto;
+		width: 100%;
+		margin: 0 auto;
+	}
+	.center-answer {
+		width: 100%;
+		margin: 0 auto;
+	}
+	.left-game, .right-game {
+		width: 50%;
+	}
+}
 
 
 
